@@ -1,0 +1,497 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Neutral professional palette - trustworthy healthcare */
+    --background: 0 0% 100%;
+    --foreground: 220 13% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 18%;
+
+    /* Primary: Professional blue */
+    --primary: 210 100% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 100% 95%;
+    --primary-dark: 210 100% 35%;
+
+    /* Secondary: Soft gray */
+    --secondary: 220 13% 95%;
+    --secondary-foreground: 220 13% 18%;
+
+    /* Muted: Subtle grays */
+    --muted: 220 13% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Accent: Soft blue accent */
+    --accent: 210 100% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Success: Soft green */
+    --success: 145 60% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Destructive: Soft red */
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 210 100% 45%;
+
+    /* Accessibility animation durations */
+    --accessibility-transition-duration: 0.3s;
+
+    --radius: 0.375rem;
+
+    /* Gradients - subtle professional */
+    --gradient-hero: linear-gradient(180deg, hsl(210 100% 50%) 0%, hsl(210 100% 45%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(0 0% 100%) 100%);
+    
+    /* Shadows - subtle and professional */
+    --shadow-sm: 0 1px 2px 0 hsl(215 25% 27% / 0.04);
+    --shadow-md: 0 2px 4px -1px hsl(215 25% 27% / 0.06);
+    --shadow-lg: 0 4px 12px -2px hsl(215 25% 27% / 0.08);
+    --shadow-card: 0 1px 3px hsl(210 100% 50% / 0.05);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 215 25% 12%;
+    --foreground: 210 40% 98%;
+
+    --card: 215 25% 16%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 215 25% 16%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 100% 20%;
+    --primary-dark: 210 100% 70%;
+
+    --secondary: 180 30% 25%;
+    --secondary-foreground: 180 50% 88%;
+
+    --muted: 215 25% 20%;
+    --muted-foreground: 215 15% 65%;
+
+    --accent: 195 85% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 145 60% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 25% 25%;
+    --input: 215 25% 25%;
+    --ring: 210 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Prevent horizontal overflow that could shift fixed elements */
+    overflow-x: hidden;
+    /* Ensure body width is always consistent */
+    min-width: 100vw;
+    /* Apply accessibility line height */
+    line-height: var(--accessibility-line-height, 1.5) !important;
+    /* Smooth transitions for accessibility changes */
+    transition:
+      background-color var(--accessibility-transition-duration, 0.3s) ease,
+      color var(--accessibility-transition-duration, 0.3s) ease,
+      filter var(--accessibility-transition-duration, 0.3s) ease,
+      font-size var(--accessibility-transition-duration, 0.3s) ease,
+      line-height var(--accessibility-transition-duration, 0.3s) ease,
+      letter-spacing var(--accessibility-transition-duration, 0.3s) ease,
+      font-family var(--accessibility-transition-duration, 0.3s) ease;
+  }
+
+  /* Apply line height to all text elements */
+  body * {
+    line-height: var(--accessibility-line-height, 1.5) !important;
+    /* Smooth transitions for all elements affected by accessibility */
+    transition:
+      background-color var(--accessibility-transition-duration, 0.3s) ease,
+      color var(--accessibility-transition-duration, 0.3s) ease,
+      border-color var(--accessibility-transition-duration, 0.3s) ease,
+      font-size var(--accessibility-transition-duration, 0.3s) ease,
+      line-height var(--accessibility-transition-duration, 0.3s) ease,
+      letter-spacing var(--accessibility-transition-duration, 0.3s) ease,
+      font-family var(--accessibility-transition-duration, 0.3s) ease,
+      opacity var(--accessibility-transition-duration, 0.3s) ease;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Scale HTML root font-size - this affects ALL rem units globally */
+    font-size: calc(16px * var(--accessibility-scale-multiplier, 1)) !important;
+    /* Prevent layout shift when scrollbar appears/disappears */
+    scrollbar-gutter: stable;
+    /* Prevent horizontal overflow */
+    overflow-x: hidden;
+  }
+
+  /* Accessibility variables */
+  :root {
+    --accessibility-scale-multiplier: 1;
+    --accessibility-line-height: 1.5;
+    --accessibility-letter-spacing: 0px;
+    --accessibility-font-family: inherit;
+  }
+
+  /* All content inherits scaled font-size from body automatically
+     No need for individual scaling rules - body handles it globally */
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-medium px-6 py-3 rounded-md 
+           shadow-sm hover:bg-primary-dark transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-foreground font-medium px-6 py-3 rounded-md 
+           border border-border hover:bg-muted transition-colors duration-200;
+  }
+
+  .card-medical {
+    @apply bg-card rounded-md p-6 transition-shadow duration-200
+           border border-border hover:shadow-md;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12;
+  }
+}
+
+/* ===== ACCESSIBILITY STYLES ===== */
+@layer base {
+  /* Apply accessibility settings to main content */
+  main {
+    line-height: var(--accessibility-line-height) !important;
+    letter-spacing: var(--accessibility-letter-spacing) !important;
+    font-family: var(--accessibility-font-family) !important;
+  }
+
+  /* ===== FIXED NAVBAR - NO SCALING ===== */
+  /* Isolate navbar from global font scaling to maintain consistent, accessible size */
+
+  /* Navbar container fixed height */
+  .fixed-navbar {
+    height: 72px !important; /* Fixed instead of h-16 (4rem which scales) */
+    min-height: 72px !important;
+    max-height: 72px !important;
+  }
+
+  /* All navbar text and elements use fixed pixel sizing */
+  .fixed-navbar,
+  .fixed-navbar * {
+    font-size: 18px !important; /* Large, accessible base size */
+    line-height: 1.5 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* Logo text - larger and prominent */
+  .fixed-navbar .navbar-logo {
+    font-size: 22px !important; /* Fixed instead of text-xl (1.25rem) */
+    font-weight: 600 !important;
+  }
+
+  /* Navigation links */
+  .fixed-navbar .navbar-link {
+    font-size: 18px !important; /* Fixed instead of default rem sizing */
+    font-weight: 500 !important;
+  }
+
+  /* Navbar links in dark-bg mode - add background for button-like appearance */
+  [data-color-scheme="dark-bg"] .fixed-navbar .navbar-link {
+    background-color: hsl(0 0% 20%) !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+  }
+
+  [data-color-scheme="dark-bg"] .fixed-navbar .navbar-link:hover {
+    background-color: hsl(0 0% 25%) !important;
+  }
+
+  /* All icons in navbar */
+  .fixed-navbar svg {
+    width: 20px !important; /* Fixed instead of h-4/h-5 (1rem/1.25rem) */
+    height: 20px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Buttons inside navbar */
+  .fixed-navbar button {
+    height: 40px !important; /* Fixed instead of size="sm" h-9 (2.25rem) */
+    min-height: 40px !important;
+    padding: 0 16px !important;
+    font-size: 18px !important;
+  }
+
+  /* Icon-only buttons in navbar */
+  .fixed-navbar button[aria-label]:not(:has(span)) {
+    width: 40px !important;
+    padding: 0 !important;
+  }
+
+  /* Mobile menu container */
+  .fixed-navbar .mobile-menu {
+    padding: 16px 0 !important; /* Fixed instead of py-4 (1rem) */
+  }
+
+  /* Mobile menu items */
+  .fixed-navbar .mobile-menu button,
+  .fixed-navbar .mobile-menu a {
+    padding: 12px !important; /* Fixed instead of px-3 py-2 */
+    font-size: 18px !important;
+  }
+
+  /* Dropdown menus from navbar */
+  .fixed-navbar [role="menu"],
+  .fixed-navbar [data-radix-popper-content-wrapper] {
+    font-size: 18px !important;
+  }
+
+  .fixed-navbar [role="menuitem"] {
+    font-size: 18px !important;
+    padding: 12px 16px !important;
+  }
+
+  /* ===== CONTRAST MODES ===== */
+  /* High Contrast Mode - Enhanced visibility with stronger colors and borders */
+  [data-contrast="high"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --primary: 210 100% 35%; /* Darker blue for better contrast */
+    --primary-foreground: 0 0% 100%;
+    --border: 0 0% 20%; /* Much darker borders */
+    --input: 0 0% 20%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 15%;
+  }
+
+  [data-contrast="high"] *:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn *) {
+    font-weight: 500 !important; /* Bolder text for better readability */
+    text-shadow: none !important;
+  }
+
+  /* Stronger borders in high contrast - except accessibility toolbar */
+  [data-contrast="high"] button:not(.accessibility-toolbar-menu button):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn button),
+  [data-contrast="high"] input:not(.accessibility-toolbar-menu input),
+  [data-contrast="high"] textarea:not(.accessibility-toolbar-menu textarea),
+  [data-contrast="high"] select:not(.accessibility-toolbar-menu select),
+  [data-contrast="high"] .card-medical,
+  [data-contrast="high"] [class*="border"]:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *) {
+    border-width: 2px !important;
+    border-color: hsl(0 0% 20%) !important;
+  }
+
+  /* Enhanced focus indicators in high contrast */
+  [data-contrast="high"] *:focus,
+  [data-contrast="high"] *:focus-visible {
+    outline: 3px solid hsl(210 100% 35%) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Remove subtle shadows in high contrast - they reduce clarity */
+  [data-contrast="high"] * {
+    box-shadow: none !important;
+  }
+
+  /* Inverted Contrast Mode - Better implementation with preserved colors */
+  [data-contrast="inverted"] {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+    --primary: 210 100% 65%; /* Lighter blue for dark background */
+    --primary-foreground: 0 0% 0%;
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 85%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 90%;
+  }
+
+  /* Ensure all backgrounds are inverted - except accessibility toolbar */
+  [data-contrast="inverted"] .bg-card:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *),
+  [data-contrast="inverted"] [class*="bg-white"]:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *),
+  [data-contrast="inverted"] [class*="bg-card"]:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *) {
+    background-color: hsl(0 0% 10%) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+
+  /* Inverted mode buttons - except accessibility toolbar */
+  [data-contrast="inverted"] button:not(.accessibility-toolbar-menu button):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn button) {
+    background-color: hsl(0 0% 20%) !important;
+    color: hsl(0 0% 100%) !important;
+    border-color: hsl(0 0% 80%) !important;
+  }
+
+  /* Inverted mode inputs - except accessibility toolbar */
+  [data-contrast="inverted"] input:not(.accessibility-toolbar-menu input),
+  [data-contrast="inverted"] textarea:not(.accessibility-toolbar-menu textarea),
+  [data-contrast="inverted"] select:not(.accessibility-toolbar-menu select) {
+    background-color: hsl(0 0% 15%) !important;
+    color: hsl(0 0% 100%) !important;
+    border-color: hsl(0 0% 80%) !important;
+  }
+
+  /* Enhanced focus in inverted mode */
+  [data-contrast="inverted"] *:focus,
+  [data-contrast="inverted"] *:focus-visible {
+    outline: 3px solid hsl(210 100% 65%) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Color schemes */
+  [data-color-scheme="grayscale"] {
+    filter: grayscale(100%);
+  }
+
+  [data-color-scheme="light-bg"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+  }
+
+  [data-color-scheme="dark-bg"] {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 95%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 80%;
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+  }
+
+  /* Exclude accessibility menu from global dark theme rules */
+  [data-color-scheme="dark-bg"] *:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn *) {
+    border-color: hsl(0 0% 30%);
+  }
+
+  [data-color-scheme="dark-bg"] input:not(.accessibility-toolbar-menu input),
+  [data-color-scheme="dark-bg"] textarea:not(.accessibility-toolbar-menu textarea),
+  [data-color-scheme="dark-bg"] select:not(.accessibility-toolbar-menu select) {
+    background-color: hsl(0 0% 20%) !important;
+    color: hsl(0 0% 95%) !important;
+    border-color: hsl(0 0% 30%) !important;
+  }
+
+  [data-color-scheme="dark-bg"] button:not(.accessibility-toolbar-menu button):not(.accessibility-toolbar-btn button) {
+    background-color: hsl(0 0% 25%) !important;
+    color: hsl(0 0% 95%) !important;
+    border-color: hsl(0 0% 40%) !important;
+  }
+
+  [data-color-scheme="dark-bg"] .bg-card,
+  [data-color-scheme="dark-bg"] [class*="bg-white"]:not(.accessibility-toolbar-menu),
+  [data-color-scheme="dark-bg"] [class*="bg-card"]:not(.accessibility-toolbar-menu) {
+    background-color: hsl(0 0% 15%) !important;
+    color: hsl(0 0% 95%) !important;
+  }
+
+  /* Override Tailwind text color classes in dark-bg mode */
+  [data-color-scheme="dark-bg"] .text-foreground:not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *) {
+    color: hsl(0 0% 95%) !important;
+  }
+
+  [data-color-scheme="dark-bg"] .text-muted-foreground:not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *) {
+    color: hsl(0 0% 80%) !important;
+  }
+
+  [data-color-scheme="dark-bg"] .text-card-foreground:not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *) {
+    color: hsl(0 0% 95%) !important;
+  }
+
+  /* Ensure text is visible in dark mode - but don't override elements with dark backgrounds */
+  [data-color-scheme="dark-bg"] h1:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] h2:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] h3:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] h4:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] h5:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] h6:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] p:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] span:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *),
+  [data-color-scheme="dark-bg"] div:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn *):not([class*="bg-black"]):not([class*="bg-gray-"]):not([class*="bg-slate-"]):not([class*="bg-zinc-"]),
+  [data-color-scheme="dark-bg"] label:not([class*="text-white"]):not([class*="text-gray-"]):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn *) {
+    color: hsl(0 0% 95%);
+  }
+
+  /* Cards with dark backgrounds by design should keep white/light text */
+  [data-color-scheme="dark-bg"] [class*="bg-black"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-gray-8"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-gray-9"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-slate-8"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-slate-9"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-zinc-8"] *,
+  [data-color-scheme="dark-bg"] [class*="bg-zinc-9"] * {
+    color: white !important;
+  }
+
+  /* Link highlighting */
+  [data-highlight-links="true"] a {
+    background-color: hsl(60 100% 80%) !important;
+    padding: 2px 4px !important;
+    border-radius: 2px !important;
+  }
+
+  [data-underline-links="true"] a {
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+  }
+
+  /* Hide images */
+  [data-hide-images="true"] img {
+    display: none !important;
+  }
+
+  /* Reading guide */
+  [data-reading-guide="true"] {
+    position: relative;
+  }
+
+  [data-reading-guide="true"]::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: hsl(210 100% 50%);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translateY(-50%);
+  }
+}

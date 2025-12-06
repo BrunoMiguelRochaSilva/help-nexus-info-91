@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-server
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: ../docker/Dockerfile.proxy
+    container_name: proxy-server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - OLLAMA_API_URL=http://ollama:11434
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - ORPHADATA_API_URL=${ORPHADATA_API_URL}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-gemma:2b}
+      - OLLAMA_TEMPERATURE=${OLLAMA_TEMPERATURE:-0.7}
+      - OLLAMA_MAX_TOKENS=${OLLAMA_MAX_TOKENS:-2048}
+      - OLLAMA_TOP_P=${OLLAMA_TOP_P:-0.9}
+      - OLLAMA_TOP_K=${OLLAMA_TOP_K:-10}
+      - OLLAMA_REPEAT_PENALTY=${OLLAMA_REPEAT_PENALTY:-1.1}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./proxy/src:/app/src
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

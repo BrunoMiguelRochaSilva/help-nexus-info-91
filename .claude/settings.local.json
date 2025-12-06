@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p src/config src/routes src/services src/middleware src/types src/utils docker logs)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

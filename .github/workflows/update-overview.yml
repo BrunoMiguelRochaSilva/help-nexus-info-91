@@ -1,0 +1,99 @@
+name: Update Project Overview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'src/components/accessibility/**'
+      - 'src/contexts/**'
+      - 'src/types/accessibility.ts'
+      - 'vitest.config.ts'
+      - 'src/setupTests.ts'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-overview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Get full history for git log
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests to get count
+        id: tests
+        run: |
+          npm test -- --run --reporter=json > test-results.json || true
+          TEST_COUNT=$(cat test-results.json | jq '.numTotalTests // 0')
+          PASSED=$(cat test-results.json | jq '.numPassedTests // 0')
+          FAILED=$(cat test-results.json | jq '.numFailedTests // 0')
+          echo "total=$TEST_COUNT" >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+
+      - name: Update PROJECT_OVERVIEW.md
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+
+          # Update last update date
+          sed -i "s/\[LAST_UPDATE\]: [0-9-]*/[LAST_UPDATE]: $TODAY/" PROJECT_OVERVIEW.md
+
+          # Update test count
+          sed -i "s/102 automated tests ([^)]*)/\
+          ${{ steps.tests.outputs.total }} automated tests \
+          (${{ steps.tests.outputs.passed }} passing, \
+          ${{ steps.tests.outputs.failed }} failing)/" PROJECT_OVERVIEW.md
+
+          # Update dependency counts
+          DEP_COUNT=$(jq '.dependencies | length' package.json)
+          DEV_DEP_COUNT=$(jq '.devDependencies | length' package.json)
+          sed -i "s/└── package.json # [0-9]* deps, [0-9]* devDeps/\
+          └── package.json # $DEP_COUNT deps, $DEV_DEP_COUNT devDeps/" PROJECT_OVERVIEW.md
+
+          # Add auto-update comment
+          if ! grep -q "Auto-updated:" PROJECT_OVERVIEW.md; then
+            echo "<!-- Auto-updated: $(date -Iseconds) -->" | cat - PROJECT_OVERVIEW.md > temp && mv temp PROJECT_OVERVIEW.md
+          else
+            sed -i "s/<!-- Auto-updated:.*-->/<!-- Auto-updated: $(date -Iseconds) -->/" PROJECT_OVERVIEW.md
+          fi
+
+      - name: Check if there are changes
+        id: verify_diff
+        run: |
+          git diff --quiet PROJECT_OVERVIEW.md || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add PROJECT_OVERVIEW.md
+          git commit -m "chore: auto-update PROJECT_OVERVIEW.md [skip ci]"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Project Overview Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date Updated:** $(date +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tests:** ${{ steps.tests.outputs.total }} total (${{ steps.tests.outputs.passed }} passing)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dependencies:** $(jq '.dependencies | length' package.json) production, $(jq '.devDependencies | length' package.json) dev" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.verify_diff.outputs.changed }}" == "true" ]; then
+            echo "✅ PROJECT_OVERVIEW.md was updated and committed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No changes needed" >> $GITHUB_STEP_SUMMARY
+          fi

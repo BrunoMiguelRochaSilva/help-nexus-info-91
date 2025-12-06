@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check if PROJECT_OVERVIEW.md needs updating
+echo "🔍 Checking if PROJECT_OVERVIEW.md needs updating..."
+
+# Get last modified date of key files
+PACKAGE_JSON_DATE=$(git log -1 --format="%ai" -- package.json 2>/dev/null || echo "")
+OVERVIEW_DATE=$(git log -1 --format="%ai" -- PROJECT_OVERVIEW.md 2>/dev/null || echo "")
+
+# Files to monitor for changes
+WATCH_FILES="package.json src/components/accessibility/* src/contexts/* src/types/accessibility.ts"
+
+# Check if any watched files have changed since last overview update
+if git diff --cached --name-only | grep -qE "(package\.json|src/components/accessibility/|src/contexts/|src/types/accessibility\.ts)"; then
+  echo "⚠️  Accessibility-related files changed. Consider updating PROJECT_OVERVIEW.md"
+  echo "   Run: npm run update-overview (if script exists)"
+  echo ""
+  echo "   Or manually update:"
+  echo "   - [LAST_UPDATE] date"
+  echo "   - Development status section"
+  echo "   - File tree if structure changed"
+  echo ""
+  read -p "Continue with commit? (y/n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
