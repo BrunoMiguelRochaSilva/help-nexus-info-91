@@ -10,9 +10,14 @@ import { SurveyAnalytics } from '@/components/dashboard/SurveyAnalytics';
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
+      {/* Global Background Elements for Dashboard */}
+      <div className="absolute inset-0 bg-gradient-subtle opacity-40 pointer-events-none fixed"></div>
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none fixed"></div>
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[120px] pointer-events-none fixed"></div>
+
       <Header />
-      <main className="flex-1 bg-background dashboard-content">
+      <main className="flex-1 dashboard-content relative z-10">
         <DashboardHeader />
         <MotivationalSection />
         <DashboardSeparator />

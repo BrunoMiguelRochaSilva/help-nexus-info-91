@@ -23,18 +23,18 @@ export const SurveyDemographics = ({ formData, updateFormData }: SurveySectionPr
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-        {t('survey.demographics') || 'Demographics (Anonymous)'}
+        Demographic Information
       </h3>
 
       {/* Age Range */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.ageRange') || 'Age Range'}
+          Age Range
         </Label>
         <RadioGroup
           value={formData.age_range}
           onValueChange={(value) => updateFormData('age_range', value)}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+          className="flex flex-col space-y-2"
         >
           {AGE_RANGES.map((range) => (
             <div key={range} className="flex items-center space-x-2">
@@ -50,14 +50,14 @@ export const SurveyDemographics = ({ formData, updateFormData }: SurveySectionPr
       {/* Country */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.country') || 'Country of Origin'}
+          Country of origin
         </Label>
         <Select
           value={formData.country}
           onValueChange={(value) => updateFormData('country', value)}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={t('survey.selectCountry') || 'Select a country'} />
+            <SelectValue placeholder="Select a country" />
           </SelectTrigger>
           <SelectContent className="max-h-60 bg-card">
             {COUNTRIES.map((country) => (
@@ -72,12 +72,12 @@ export const SurveyDemographics = ({ formData, updateFormData }: SurveySectionPr
       {/* Mother Tongue */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.motherTongue') || 'Mother Tongue'}
+          Mother Tongue
         </Label>
         <RadioGroup
           value={formData.mother_tongue}
           onValueChange={(value) => updateFormData('mother_tongue', value)}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-2"
+          className="flex flex-col space-y-2"
         >
           {MOTHER_TONGUES.map((lang) => (
             <div key={lang} className="flex items-center space-x-2">
@@ -90,7 +90,7 @@ export const SurveyDemographics = ({ formData, updateFormData }: SurveySectionPr
         </RadioGroup>
         {formData.mother_tongue === 'Other' && (
           <Input
-            placeholder={t('survey.specifyLanguage') || 'Please specify...'}
+            placeholder="Type your answer here…"
             value={formData.mother_tongue_other}
             onChange={(e) => updateFormData('mother_tongue_other', e.target.value)}
             className="mt-2"
@@ -101,12 +101,12 @@ export const SurveyDemographics = ({ formData, updateFormData }: SurveySectionPr
       {/* Area of Residence */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.areaOfResidence') || 'Area of Residence'}
+          Area of Residence
         </Label>
         <RadioGroup
           value={formData.area_of_residence}
           onValueChange={(value) => updateFormData('area_of_residence', value)}
-          className="flex flex-wrap gap-4"
+          className="flex flex-col space-y-2"
         >
           {AREAS_OF_RESIDENCE.map((area) => (
             <div key={area} className="flex items-center space-x-2">

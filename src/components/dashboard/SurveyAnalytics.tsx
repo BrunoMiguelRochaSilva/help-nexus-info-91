@@ -17,6 +17,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  Legend,
 } from 'recharts';
 
 type MetricType = 'main_needs' | 'main_medical_followup' | 'disease_name' | 'appointment_frequency';
@@ -49,10 +50,10 @@ export const SurveyAnalytics = () => {
   const textColor = isDarkBg ? 'hsl(0 0% 95%)' : 'hsl(222.2 47.4% 11.2%)';
 
   const metrics = [
-    { id: 'main_needs' as MetricType, label: t('dashboard.mainNeeds') || 'Main Needs', icon: BarChart3 },
-    { id: 'main_medical_followup' as MetricType, label: t('dashboard.medicalFollowup') || 'Medical Follow-up', icon: Stethoscope },
-    { id: 'disease_name' as MetricType, label: t('dashboard.topDiseases') || 'Top Diseases', icon: Search },
-    { id: 'appointment_frequency' as MetricType, label: t('dashboard.medicalMonitoring') || 'Medical Monitoring', icon: Activity },
+    { id: 'main_needs' as MetricType, label: 'Main Needs', icon: BarChart3 },
+    { id: 'main_medical_followup' as MetricType, label: 'Medical Follow-up', icon: Stethoscope },
+    { id: 'disease_name' as MetricType, label: 'Top Searched Diseases', icon: Search },
+    { id: 'appointment_frequency' as MetricType, label: 'Medical Monitoring', icon: Activity },
   ];
 
   useEffect(() => {
@@ -105,9 +106,9 @@ export const SurveyAnalytics = () => {
 
         // Convert to chart data and sort by value
         const chartDataArray: ChartData[] = Object.entries(aggregatedData)
-          .map(([name, value]) => ({ 
-            name: name.charAt(0).toUpperCase() + name.slice(1), 
-            value 
+          .map(([name, value]) => ({
+            name: name.charAt(0).toUpperCase() + name.slice(1),
+            value
           }))
           .sort((a, b) => b.value - a.value)
           .slice(0, 10); // Top 10
@@ -170,8 +171,8 @@ export const SurveyAnalytics = () => {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip 
-              contentStyle={{ 
+            <Tooltip
+              contentStyle={{
                 backgroundColor: isDarkBg ? 'hsl(0 0% 15%)' : 'white',
                 borderColor: isDarkBg ? 'hsl(0 0% 30%)' : 'hsl(220 13% 91%)',
                 color: textColor,
@@ -187,15 +188,15 @@ export const SurveyAnalytics = () => {
         <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={isDarkBg ? 'hsl(0 0% 30%)' : 'hsl(220 13% 91%)'} />
           <XAxis type="number" stroke={isDarkBg ? 'hsl(0 0% 80%)' : 'hsl(220 9% 46%)'} />
-          <YAxis 
-            type="category" 
-            dataKey="name" 
-            width={150} 
-            stroke={isDarkBg ? 'hsl(0 0% 80%)' : 'hsl(220 9% 46%)'} 
+          <YAxis
+            type="category"
+            dataKey="name"
+            width={150}
+            stroke={isDarkBg ? 'hsl(0 0% 80%)' : 'hsl(220 9% 46%)'}
             tick={{ fontSize: 12 }}
           />
-          <Tooltip 
-            contentStyle={{ 
+          <Tooltip
+            contentStyle={{
               backgroundColor: isDarkBg ? 'hsl(0 0% 15%)' : 'white',
               borderColor: isDarkBg ? 'hsl(0 0% 30%)' : 'hsl(220 13% 91%)',
               color: textColor,
@@ -208,54 +209,62 @@ export const SurveyAnalytics = () => {
   };
 
   return (
-    <section className="section-container py-12">
-      <div className="max-w-5xl mx-auto">
+    <section className="section-container relative z-10 py-12">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8 px-2">
             <div className="flex items-center gap-3">
-              <BarChart3 className="w-6 h-6 text-primary" />
-              <h2 className="text-2xl font-bold" style={{ color: textColor }}>
-                {t('dashboard.surveyInsights') || 'Survey Insights'}
+              <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20">
+                <BarChart3 className="w-6 h-6 text-primary" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-dark">
+                See what people are searching
               </h2>
             </div>
-            <span className="text-sm text-muted-foreground">
-              {totalResponses} {t('dashboard.responses') || 'responses'}
-            </span>
+            <div className="px-4 py-2 rounded-full glass-panel border-primary/20 bg-primary/5">
+              <span className="text-sm font-medium text-primary-dark">
+                <span className="font-bold">{totalResponses}</span> {t('dashboard.responses') || 'responses'}
+              </span>
+            </div>
           </div>
 
           {/* Metric Selector */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-3 mb-8 px-2">
             {metrics.map((metric) => {
               const Icon = metric.icon;
+              const isActive = activeMetric === metric.id;
               return (
-                <Button
+                <button
                   key={metric.id}
-                  variant={activeMetric === metric.id ? 'default' : 'outline'}
-                  size="sm"
                   onClick={() => setActiveMetric(metric.id)}
-                  className="gap-2"
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${isActive
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-105'
+                    : 'glass-panel hover:bg-white/60 dark:hover:bg-white/10 hover:border-primary/30 text-muted-foreground hover:text-foreground'
+                    }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-primary'}`} />
                   {metric.label}
-                </Button>
+                </button>
               );
             })}
           </div>
 
           {/* Chart */}
-          <div className="bg-card rounded-lg border border-border p-6">
+          <div className="glass-card p-6 md:p-8 border-white/40 dark:border-white/10">
             {isLoading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-8 w-48" />
-                <Skeleton className="h-64 w-full" />
+              <div className="space-y-6">
+                <Skeleton className="h-10 w-64 bg-primary/10" />
+                <Skeleton className="h-[350px] w-full bg-primary/5 rounded-xl" />
               </div>
             ) : (
-              renderChart()
+              <div className="min-h-[350px] w-full">
+                {renderChart()}
+              </div>
             )}
           </div>
         </motion.div>

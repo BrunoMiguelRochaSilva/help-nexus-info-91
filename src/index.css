@@ -8,98 +8,112 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Neutral professional palette - trustworthy healthcare */
-    --background: 0 0% 100%;
-    --foreground: 220 13% 18%;
+    /* Calm Medical Tech Theme - Light Mode */
+    --background: 210 50% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 18%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary: Professional blue */
-    --primary: 210 100% 45%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 210 100% 95%;
-    --primary-dark: 210 100% 35%;
+    /* Primary: Deep Trustworthy Blue */
+    --primary: 221 83% 53%;
+    /* #2563EB */
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 217 91% 60%;
+    --primary-dark: 224 76% 48%;
 
-    /* Secondary: Soft gray */
-    --secondary: 220 13% 95%;
-    --secondary-foreground: 220 13% 18%;
+    /* Secondary: Soft Purple/Blue Mix */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    /* Muted: Subtle grays */
-    --muted: 220 13% 96%;
-    --muted-foreground: 220 9% 46%;
+    /* Muted: Subtle cool grays */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    /* Accent: Soft blue accent */
-    --accent: 210 100% 45%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent: Neon Cyan & Purple Glows */
+    --accent: 199 89% 48%;
+    /* Cyan-ish */
+    --accent-foreground: 222 47% 11%;
 
-    /* Success: Soft green */
-    --success: 145 60% 45%;
-    --success-foreground: 0 0% 100%;
+    /* State colors */
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    /* Destructive: Soft red */
-    --destructive: 0 65% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 210 100% 45%;
+    /* Glassmorphism Variables */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --backdrop-blur: 12px;
 
     /* Accessibility animation durations */
     --accessibility-transition-duration: 0.3s;
 
-    --radius: 0.375rem;
+    --radius: 1rem;
+    /* More rounded corners (16px) */
 
-    /* Gradients - subtle professional */
-    --gradient-hero: linear-gradient(180deg, hsl(210 100% 50%) 0%, hsl(210 100% 45%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(0 0% 100%) 100%);
-    
-    /* Shadows - subtle and professional */
-    --shadow-sm: 0 1px 2px 0 hsl(215 25% 27% / 0.04);
-    --shadow-md: 0 2px 4px -1px hsl(215 25% 27% / 0.06);
-    --shadow-lg: 0 4px 12px -2px hsl(215 25% 27% / 0.08);
-    --shadow-card: 0 1px 3px hsl(210 100% 50% / 0.05);
+    /* Gradients - Modern & Soft */
+    --gradient-hero: linear-gradient(135deg, hsl(210 100% 96%) 0%, hsl(224 76% 92%) 100%);
+    --gradient-subtle: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, rgba(255, 255, 255, 0) 50%);
+    --gradient-glow: linear-gradient(90deg, hsl(199 89% 48%) 0%, hsl(262 83% 58%) 100%);
+
+    /* Shadows - Soft & Float-y */
+    --shadow-sm: 0 2px 4px rgba(148, 163, 184, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(148, 163, 184, 0.15);
+    --shadow-lg: 0 10px 25px -3px rgba(148, 163, 184, 0.15);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.3);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 215 25% 12%;
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 215 25% 16%;
+    --card: 222 47% 13%;
+    /* Slightly lighter than bg */
     --card-foreground: 210 40% 98%;
 
-    --popover: 215 25% 16%;
+    --popover: 222 47% 13%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 100% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 210 100% 20%;
-    --primary-dark: 210 100% 70%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+    --primary-light: 217 91% 70%;
+    --primary-dark: 217 91% 50%;
 
-    --secondary: 180 30% 25%;
-    --secondary-foreground: 180 50% 88%;
+    --secondary: 217 19% 27%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 215 25% 20%;
-    --muted-foreground: 215 15% 65%;
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 195 85% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 210 40% 98%;
 
-    --success: 145 60% 45%;
-    --success-foreground: 0 0% 100%;
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
 
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 215 25% 25%;
-    --input: 215 25% 25%;
-    --ring: 210 100% 60%;
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 224 76% 48%;
+
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -163,34 +177,76 @@ All colors MUST be HSL.
   /* All content inherits scaled font-size from body automatically
      No need for individual scaling rules - body handles it globally */
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
   }
 }
 
 @layer components {
+
+  /* Glassmorphism Utilities */
+  .glass-panel {
+    @apply backdrop-blur-md border border-white/20 shadow-lg;
+    background: var(--glass-bg);
+  }
+
+  .glass-card {
+    @apply rounded-2xl backdrop-blur-md border border-white/50 shadow-lg transition-all duration-300;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
+  }
+
+  .dark .glass-card {
+    @apply border-white/10;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(30, 41, 59, 0.4) 100%);
+  }
+
+  .glass-card:hover {
+    @apply transform scale-[1.02] shadow-xl border-white/60;
+  }
+
   .btn-primary {
-    @apply bg-primary text-white font-medium px-6 py-3 rounded-md 
-           shadow-sm hover:bg-primary-dark transition-colors duration-200;
+    @apply bg-primary text-white font-medium px-6 py-3 rounded-full shadow-lg hover:shadow-cyan-500/20 hover:bg-primary-dark transition-all duration-300 hover:scale-105 relative overflow-hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+  }
+
+  .btn-primary:hover::after {
+    @apply opacity-100;
   }
 
   .btn-secondary {
-    @apply bg-white text-foreground font-medium px-6 py-3 rounded-md 
-           border border-border hover:bg-muted transition-colors duration-200;
+    @apply bg-white/80 text-foreground font-medium px-6 py-3 rounded-full border border-border hover:bg-white hover:text-primary transition-all duration-300 shadow-sm hover:shadow-md backdrop-blur-sm;
   }
 
   .card-medical {
-    @apply bg-card rounded-md p-6 transition-shadow duration-200
-           border border-border hover:shadow-md;
+    @apply glass-card p-8;
   }
 
   .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+  }
+
+  .orb-bg {
+    @apply absolute rounded-full blur-[100px] opacity-30 pointer-events-none;
   }
 }
 
 /* ===== ACCESSIBILITY STYLES ===== */
 @layer base {
+
   /* Apply accessibility settings to main content */
   main {
     line-height: var(--accessibility-line-height) !important;
@@ -203,7 +259,8 @@ All colors MUST be HSL.
 
   /* Navbar container fixed height */
   .fixed-navbar {
-    height: 72px !important; /* Fixed instead of h-16 (4rem which scales) */
+    height: 72px !important;
+    /* Fixed instead of h-16 (4rem which scales) */
     min-height: 72px !important;
     max-height: 72px !important;
   }
@@ -211,20 +268,23 @@ All colors MUST be HSL.
   /* All navbar text and elements use fixed pixel sizing */
   .fixed-navbar,
   .fixed-navbar * {
-    font-size: 18px !important; /* Large, accessible base size */
+    font-size: 18px !important;
+    /* Large, accessible base size */
     line-height: 1.5 !important;
     letter-spacing: 0 !important;
   }
 
   /* Logo text - larger and prominent */
   .fixed-navbar .navbar-logo {
-    font-size: 22px !important; /* Fixed instead of text-xl (1.25rem) */
+    font-size: 22px !important;
+    /* Fixed instead of text-xl (1.25rem) */
     font-weight: 600 !important;
   }
 
   /* Navigation links */
   .fixed-navbar .navbar-link {
-    font-size: 18px !important; /* Fixed instead of default rem sizing */
+    font-size: 18px !important;
+    /* Fixed instead of default rem sizing */
     font-weight: 500 !important;
   }
 
@@ -241,14 +301,16 @@ All colors MUST be HSL.
 
   /* All icons in navbar */
   .fixed-navbar svg {
-    width: 20px !important; /* Fixed instead of h-4/h-5 (1rem/1.25rem) */
+    width: 20px !important;
+    /* Fixed instead of h-4/h-5 (1rem/1.25rem) */
     height: 20px !important;
     flex-shrink: 0 !important;
   }
 
   /* Buttons inside navbar */
   .fixed-navbar button {
-    height: 40px !important; /* Fixed instead of size="sm" h-9 (2.25rem) */
+    height: 40px !important;
+    /* Fixed instead of size="sm" h-9 (2.25rem) */
     min-height: 40px !important;
     padding: 0 16px !important;
     font-size: 18px !important;
@@ -262,13 +324,15 @@ All colors MUST be HSL.
 
   /* Mobile menu container */
   .fixed-navbar .mobile-menu {
-    padding: 16px 0 !important; /* Fixed instead of py-4 (1rem) */
+    padding: 16px 0 !important;
+    /* Fixed instead of py-4 (1rem) */
   }
 
   /* Mobile menu items */
   .fixed-navbar .mobile-menu button,
   .fixed-navbar .mobile-menu a {
-    padding: 12px !important; /* Fixed instead of px-3 py-2 */
+    padding: 12px !important;
+    /* Fixed instead of px-3 py-2 */
     font-size: 18px !important;
   }
 
@@ -290,16 +354,19 @@ All colors MUST be HSL.
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
-    --primary: 210 100% 35%; /* Darker blue for better contrast */
+    --primary: 210 100% 35%;
+    /* Darker blue for better contrast */
     --primary-foreground: 0 0% 100%;
-    --border: 0 0% 20%; /* Much darker borders */
+    --border: 0 0% 20%;
+    /* Much darker borders */
     --input: 0 0% 20%;
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 15%;
   }
 
   [data-contrast="high"] *:not(.accessibility-toolbar-menu):not(.accessibility-toolbar-menu *):not(.accessibility-toolbar-btn):not(.accessibility-toolbar-btn *) {
-    font-weight: 500 !important; /* Bolder text for better readability */
+    font-weight: 500 !important;
+    /* Bolder text for better readability */
     text-shadow: none !important;
   }
 
@@ -332,7 +399,8 @@ All colors MUST be HSL.
     --foreground: 0 0% 100%;
     --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
-    --primary: 210 100% 65%; /* Lighter blue for dark background */
+    --primary: 210 100% 65%;
+    /* Lighter blue for dark background */
     --primary-foreground: 0 0% 0%;
     --border: 0 0% 80%;
     --input: 0 0% 80%;

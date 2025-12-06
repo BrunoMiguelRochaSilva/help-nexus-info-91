@@ -25,23 +25,23 @@ export const SurveyUsage = ({ formData, updateFormData }: SurveySectionProps) =>
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-        {t('survey.usageContext') || 'Usage Context'}
+        How you use Rare Help
       </h3>
 
       {/* Discovery Source */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.discoverySource') || 'How did you discover the app?'}
+          How did you discover the app?
         </Label>
         <RadioGroup
           value={formData.discovery_source}
           onValueChange={(value) => updateFormData('discovery_source', value)}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-2"
+          className="flex flex-col space-y-2"
         >
           {DISCOVERY_SOURCES.map((source) => (
             <div key={source} className="flex items-center space-x-2">
               <RadioGroupItem value={source} id={`source-${source}`} />
-              <Label htmlFor={`source-${source}`} className="cursor-pointer text-sm">
+              <Label htmlFor={`source-${source}`} className="cursor-pointer">
                 {source}
               </Label>
             </div>
@@ -52,9 +52,9 @@ export const SurveyUsage = ({ formData, updateFormData }: SurveySectionProps) =>
       {/* Main Needs - Multiple Choice */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.mainNeeds') || 'Main Needs (Select all that apply)'}
+          Main Needs (Select all that apply)
         </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="flex flex-col space-y-2">
           {MAIN_NEEDS.map((need) => (
             <div key={need} className="flex items-center space-x-2">
               <Checkbox
@@ -62,7 +62,7 @@ export const SurveyUsage = ({ formData, updateFormData }: SurveySectionProps) =>
                 checked={formData.main_needs.includes(need)}
                 onCheckedChange={() => handleNeedToggle(need)}
               />
-              <Label htmlFor={`need-${need}`} className="cursor-pointer text-sm">
+              <Label htmlFor={`need-${need}`} className="cursor-pointer">
                 {need}
               </Label>
             </div>
@@ -73,12 +73,12 @@ export const SurveyUsage = ({ formData, updateFormData }: SurveySectionProps) =>
       {/* Main Device */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.mainDevice') || 'Main Device'}
+          Main Device
         </Label>
         <RadioGroup
           value={formData.main_device}
           onValueChange={(value) => updateFormData('main_device', value)}
-          className="flex flex-wrap gap-4"
+          className="flex flex-col space-y-2"
         >
           {MAIN_DEVICES.map((device) => (
             <div key={device} className="flex items-center space-x-2">
@@ -94,17 +94,17 @@ export const SurveyUsage = ({ formData, updateFormData }: SurveySectionProps) =>
       {/* Tech Comfort */}
       <div className="space-y-3">
         <Label className="text-base font-medium">
-          {t('survey.techComfort') || 'Comfort with Technology'}
+          Comfort with Technology
         </Label>
         <RadioGroup
           value={formData.tech_comfort}
           onValueChange={(value) => updateFormData('tech_comfort', value)}
-          className="grid grid-cols-2 gap-2"
+          className="flex flex-col space-y-2"
         >
           {TECH_COMFORT.map((level) => (
             <div key={level} className="flex items-center space-x-2">
               <RadioGroupItem value={level} id={`tech-${level}`} />
-              <Label htmlFor={`tech-${level}`} className="cursor-pointer text-sm">
+              <Label htmlFor={`tech-${level}`} className="cursor-pointer">
                 {level}
               </Label>
             </div>
