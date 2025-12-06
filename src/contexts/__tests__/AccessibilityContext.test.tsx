@@ -367,7 +367,7 @@ describe('AccessibilityContext', () => {
       });
 
       act(() => {
-        result.current.updateSetting('colorScheme', 'dark');
+        result.current.updateSetting('colorScheme', 'dark-bg');
       });
 
       const root = document.documentElement;

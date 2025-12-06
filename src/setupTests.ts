@@ -1,4 +1,4 @@
-import { expect, afterEach } from 'vitest';
+import { expect, afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
@@ -43,12 +43,14 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-  takeRecords() {
-    return [];
-  }
-};
+const mockIntersectionObserver = vi.fn().mockImplementation(() => ({
+  root: null,
+  rootMargin: '',
+  thresholds: [],
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  takeRecords: vi.fn().mockReturnValue([]),
+}));
+
+global.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver;
