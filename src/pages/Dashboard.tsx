@@ -6,6 +6,7 @@ import { DashboardSeparator } from '@/components/DashboardSeparator';
 import { DashboardFeatures } from '@/components/DashboardFeatures';
 import { MetricsOverview } from '@/components/MetricsOverview';
 import { RecentFeedback } from '@/components/RecentFeedback';
+import { SurveyAnalytics } from '@/components/dashboard/SurveyAnalytics';
 
 const Dashboard = () => {
   return (
@@ -15,6 +16,7 @@ const Dashboard = () => {
         <DashboardHeader />
         <MotivationalSection />
         <DashboardSeparator />
+        <SurveyAnalytics />
         <DashboardFeatures />
         <MetricsOverview />
         <RecentFeedback />
