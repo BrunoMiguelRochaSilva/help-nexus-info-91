@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      discussion_likes: {
+        Row: {
+          created_at: string
+          discussion_id: string
+          id: string
+          user_identifier: string
+        }
+        Insert: {
+          created_at?: string
+          discussion_id: string
+          id?: string
+          user_identifier: string
+        }
+        Update: {
+          created_at?: string
+          discussion_id?: string
+          id?: string
+          user_identifier?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_likes_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussions: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          is_hidden: boolean | null
+          is_reported: boolean | null
+          likes_count: number
+          replies_count: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          is_hidden?: boolean | null
+          is_reported?: boolean | null
+          likes_count?: number
+          replies_count?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_hidden?: boolean | null
+          is_reported?: boolean | null
+          likes_count?: number
+          replies_count?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           comment: string | null
@@ -37,6 +105,76 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      replies: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          discussion_id: string
+          id: string
+          is_hidden: boolean | null
+          is_reported: boolean | null
+          likes_count: number
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          discussion_id: string
+          id?: string
+          is_hidden?: boolean | null
+          is_reported?: boolean | null
+          likes_count?: number
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          discussion_id?: string
+          id?: string
+          is_hidden?: boolean | null
+          is_reported?: boolean | null
+          likes_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "replies_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reply_likes: {
+        Row: {
+          created_at: string
+          id: string
+          reply_id: string
+          user_identifier: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reply_id: string
+          user_identifier: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reply_id?: string
+          user_identifier?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reply_likes_reply_id_fkey"
+            columns: ["reply_id"]
+            isOneToOne: false
+            referencedRelation: "replies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       survey_responses: {
         Row: {

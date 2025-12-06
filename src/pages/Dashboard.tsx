@@ -7,6 +7,7 @@ import { DashboardFeatures } from '@/components/DashboardFeatures';
 import { MetricsOverview } from '@/components/MetricsOverview';
 import { RecentFeedback } from '@/components/RecentFeedback';
 import { SurveyAnalytics } from '@/components/dashboard/SurveyAnalytics';
+import { StayInTouchSection } from '@/components/discussions';
 
 const Dashboard = () => {
   return (
@@ -25,6 +26,9 @@ const Dashboard = () => {
         <DashboardFeatures />
         <MetricsOverview />
         <RecentFeedback />
+        <div className="section-container">
+          <StayInTouchSection />
+        </div>
       </main>
       <Footer />
     </div>
