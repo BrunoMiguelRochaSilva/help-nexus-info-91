@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, ClipboardList } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SurveyModal } from '@/components/survey';
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [surveyOpen, setSurveyOpen] = useState(false);
   const isMainPage = location.pathname === '/';
 
   const changeLanguage = (lang: string) => {
@@ -88,6 +90,18 @@ export const Header = () => {
             >
               {t('nav.dashboard') || 'Dashboard'}
             </Link>
+            
+            {/* Survey Button */}
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setSurveyOpen(true)}
+              className="gap-2"
+            >
+              <ClipboardList className="h-4 w-4" />
+              <span className="hidden lg:inline">{t('nav.tellUsMore') || 'Tell us more about you'}</span>
+              <span className="lg:hidden">{t('nav.survey') || 'Survey'}</span>
+            </Button>
           </div>
 
           {/* Right Side Actions */}
@@ -163,10 +177,27 @@ export const Header = () => {
               >
                 {t('nav.dashboard') || 'Dashboard'}
               </Link>
+              
+              {/* Mobile Survey Button */}
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => {
+                  setSurveyOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="gap-2 mt-2"
+              >
+                <ClipboardList className="h-4 w-4" />
+                {t('nav.tellUsMore') || 'Tell us more about you'}
+              </Button>
             </div>
           </div>
         )}
       </nav>
+
+      {/* Survey Modal */}
+      <SurveyModal isOpen={surveyOpen} onClose={() => setSurveyOpen(false)} />
     </header>
   );
 };
