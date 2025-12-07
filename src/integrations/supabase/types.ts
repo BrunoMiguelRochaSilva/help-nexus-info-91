@@ -106,6 +106,36 @@ export type Database = {
         }
         Relationships: []
       }
+      private_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean
+          read_at: string | null
+          receiver_name: string
+          sender_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          read_at?: string | null
+          receiver_name: string
+          sender_name: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          read_at?: string | null
+          receiver_name?: string
+          sender_name?: string
+        }
+        Relationships: []
+      }
       replies: {
         Row: {
           author_name: string

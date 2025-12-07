@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, Clock } from 'lucide-react';
 import { Reply } from './types';
 import { getRelativeTime } from './utils';
+import { UserNameWithMessage } from '@/components/messaging';
 
 interface ReplyItemProps {
   reply: Reply;
@@ -25,7 +26,7 @@ export const ReplyItem = ({ reply, onLike, isLiked }: ReplyItemProps) => {
           <span>{reply.likes_count}</span>
         </button>
         <div className="flex items-center gap-2">
-          <span className="font-medium">{reply.author_name || 'Anonymous'}</span>
+          <UserNameWithMessage authorName={reply.author_name || 'Anonymous'} />
           <span className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             {getRelativeTime(reply.created_at)}
