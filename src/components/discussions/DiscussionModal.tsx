@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { UserNameWithMessage } from '@/components/messaging';
 
 interface DiscussionModalProps {
   discussion: Discussion | null;
@@ -207,7 +208,7 @@ export const DiscussionModal = ({
                   <span>{discussion.likes_count} likes</span>
                 </button>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium">{discussion.author_name || 'Anonymous'}</span>
+                  <UserNameWithMessage authorName={discussion.author_name || 'Anonymous'} />
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {getRelativeTime(discussion.created_at)}

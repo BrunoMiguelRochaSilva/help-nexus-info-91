@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Clock } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Discussion } from './types';
 import { getRelativeTime, truncateText } from './utils';
+import { UserNameWithMessage } from '@/components/messaging';
 
 interface DiscussionCardProps {
   discussion: Discussion;
@@ -42,7 +43,7 @@ export const DiscussionCard = ({ discussion, onClick, onLike, isLiked }: Discuss
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-medium">{discussion.author_name || 'Anonymous'}</span>
+            <UserNameWithMessage authorName={discussion.author_name || 'Anonymous'} />
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {getRelativeTime(discussion.updated_at)}
