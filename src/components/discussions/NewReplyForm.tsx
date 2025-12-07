@@ -19,6 +19,7 @@ export const NewReplyForm = ({ onSubmit, isSubmitting }: NewReplyFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setError('');
 
     if (!body.trim()) {
@@ -28,9 +29,14 @@ export const NewReplyForm = ({ onSubmit, isSubmitting }: NewReplyFormProps) => {
 
     const name = isAuthenticated && user ? user.name : authorName.trim() || 'Anonymous';
     
-    await onSubmit(body.trim(), name);
-    setBody('');
-    setAuthorName('');
+    try {
+      await onSubmit(body.trim(), name);
+      setBody('');
+      setAuthorName('');
+    } catch (err) {
+      console.error('Reply submission error:', err);
+      setError('Failed to submit reply. Please try again.');
+    }
   };
 
   return (
@@ -69,7 +75,8 @@ export const NewReplyForm = ({ onSubmit, isSubmitting }: NewReplyFormProps) => {
       )}
 
       <Button
-        type="submit"
+        type="button"
+        onClick={handleSubmit}
         disabled={isSubmitting || !body.trim()}
         className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
       >
