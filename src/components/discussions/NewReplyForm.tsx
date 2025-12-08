@@ -17,9 +17,9 @@ export const NewReplyForm = ({ onSubmit, isSubmitting }: NewReplyFormProps) => {
   const [authorName, setAuthorName] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setError('');
 
     if (!body.trim()) {
