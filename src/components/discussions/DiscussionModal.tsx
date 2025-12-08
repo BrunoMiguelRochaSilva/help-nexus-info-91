@@ -4,8 +4,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
-import { Heart, Clock, MessageCircle } from 'lucide-react';
+import { Heart, Clock, MessageCircle, Pencil, Trash2, X, Check, Plus } from 'lucide-react';
 import { Discussion, Reply } from './types';
 import { getRelativeTime, getUserIdentifier } from './utils';
 import { ReplyItem } from './ReplyItem';
@@ -15,6 +16,25 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { UserNameWithMessage } from '@/components/messaging';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 interface DiscussionModalProps {
   discussion: Discussion | null;
@@ -23,6 +43,7 @@ interface DiscussionModalProps {
   onLike: () => void;
   isLiked: boolean;
   onUpdate: () => void;
+  onDelete?: (discussionId: string) => Promise<void>;
 }
 
 export const DiscussionModal = ({
@@ -32,17 +53,31 @@ export const DiscussionModal = ({
   onLike,
   isLiked,
   onUpdate,
+  onDelete,
 }: DiscussionModalProps) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [replies, setReplies] = useState<Reply[]>([]);
   const [likedReplies, setLikedReplies] = useState<Set<string>>(new Set());
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
+  
+  // Edit discussion state
+  const [isEditingDiscussion, setIsEditingDiscussion] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
+  const [isSavingDiscussion, setIsSavingDiscussion] = useState(false);
+
+  const isDiscussionAuthor = isAuthenticated && user?.name === discussion?.author_name;
 
   useEffect(() => {
     if (discussion && isOpen) {
       fetchReplies();
       fetchLikedReplies();
+      setEditTitle(discussion.title);
+      setEditBody(discussion.body);
+      setIsReplyFormOpen(false);
+      setIsEditingDiscussion(false);
     }
   }, [discussion, isOpen]);
 
@@ -169,6 +204,7 @@ export const DiscussionModal = ({
       if (error) throw error;
       
       setReplies((prev) => [...prev, data]);
+      setIsReplyFormOpen(false);
       onUpdate();
       toast.success('Reply posted successfully');
     } catch (error) {
@@ -179,34 +215,195 @@ export const DiscussionModal = ({
     }
   };
 
+  const handleEditReply = async (replyId: string, newBody: string) => {
+    try {
+      const { error } = await supabase
+        .from('replies')
+        .update({ body: newBody })
+        .eq('id', replyId);
+
+      if (error) throw error;
+      
+      setReplies((prev) =>
+        prev.map((r) => (r.id === replyId ? { ...r, body: newBody } : r))
+      );
+      toast.success('Reply updated');
+    } catch (error) {
+      console.error('Error updating reply:', error);
+      toast.error('Failed to update reply');
+      throw error;
+    }
+  };
+
+  const handleDeleteReply = async (replyId: string) => {
+    try {
+      const { error } = await supabase
+        .from('replies')
+        .update({ is_hidden: true })
+        .eq('id', replyId);
+
+      if (error) throw error;
+      
+      setReplies((prev) => prev.filter((r) => r.id !== replyId));
+      onUpdate();
+      toast.success('Reply deleted');
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+      toast.error('Failed to delete reply');
+      throw error;
+    }
+  };
+
+  const handleSaveDiscussionEdit = async () => {
+    if (!discussion || !editTitle.trim() || !editBody.trim()) return;
+    
+    setIsSavingDiscussion(true);
+    try {
+      const { error } = await supabase
+        .from('discussions')
+        .update({ title: editTitle.trim(), body: editBody.trim() })
+        .eq('id', discussion.id);
+
+      if (error) throw error;
+      
+      setIsEditingDiscussion(false);
+      onUpdate();
+      toast.success('Discussion updated');
+    } catch (error) {
+      console.error('Error updating discussion:', error);
+      toast.error('Failed to update discussion');
+    } finally {
+      setIsSavingDiscussion(false);
+    }
+  };
+
+  const handleDeleteDiscussion = async () => {
+    if (!discussion || !onDelete) return;
+    try {
+      await onDelete(discussion.id);
+      onClose();
+    } catch (error) {
+      console.error('Error deleting discussion:', error);
+    }
+  };
+
   if (!discussion) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-4 shrink-0">
-          <DialogTitle className="text-xl font-semibold text-foreground pr-8">
-            {discussion.title}
-          </DialogTitle>
+          {isEditingDiscussion ? (
+            <Input
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="text-xl font-semibold bg-background border-input"
+              placeholder="Discussion title"
+            />
+          ) : (
+            <DialogTitle className="text-xl font-semibold text-foreground pr-8">
+              {discussion.title}
+            </DialogTitle>
+          )}
+          <DialogDescription className="sr-only">
+            Discussion thread with replies
+          </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="flex-1 min-h-0 px-6">
           <div className="space-y-4">
             {/* Main discussion content */}
             <div className="space-y-3">
-              <p className="text-foreground whitespace-pre-wrap">{discussion.body}</p>
+              {isEditingDiscussion ? (
+                <div className="space-y-2">
+                  <Textarea
+                    value={editBody}
+                    onChange={(e) => setEditBody(e.target.value)}
+                    className="min-h-[100px] bg-background border-input text-foreground resize-none"
+                    placeholder="Discussion content"
+                  />
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveDiscussionEdit}
+                      disabled={isSavingDiscussion || !editTitle.trim() || !editBody.trim()}
+                      className="rounded-full"
+                    >
+                      <Check className="h-3 w-3 mr-1" />
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setIsEditingDiscussion(false);
+                        setEditTitle(discussion.title);
+                        setEditBody(discussion.body);
+                      }}
+                      className="rounded-full"
+                    >
+                      <X className="h-3 w-3 mr-1" />
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-foreground whitespace-pre-wrap">{discussion.body}</p>
+              )}
               
               <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <button
-                  onClick={onLike}
-                  className={`flex items-center gap-1.5 transition-colors hover:text-primary ${
-                    isLiked ? 'text-primary' : ''
-                  }`}
-                  aria-label={isLiked ? 'Unlike discussion' : 'Like discussion'}
-                >
-                  <Heart className={`h-4 w-4 ${isLiked ? 'fill-primary' : ''}`} />
-                  <span>{discussion.likes_count} likes</span>
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={onLike}
+                    className={`flex items-center gap-1.5 transition-colors hover:text-primary ${
+                      isLiked ? 'text-primary' : ''
+                    }`}
+                    aria-label={isLiked ? 'Unlike discussion' : 'Like discussion'}
+                  >
+                    <Heart className={`h-4 w-4 ${isLiked ? 'fill-primary' : ''}`} />
+                    <span>{discussion.likes_count} likes</span>
+                  </button>
+                  
+                  {isDiscussionAuthor && !isEditingDiscussion && (
+                    <>
+                      <button
+                        onClick={() => setIsEditingDiscussion(true)}
+                        className="flex items-center gap-1 transition-colors hover:text-primary"
+                        aria-label="Edit discussion"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </button>
+                      
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button
+                            className="flex items-center gap-1 transition-colors hover:text-destructive"
+                            aria-label="Delete discussion"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Delete
+                          </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Discussion</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this discussion? This will also remove all replies. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteDiscussion} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </>
+                  )}
+                </div>
+                
                 <div className="flex items-center gap-2">
                   <UserNameWithMessage authorName={discussion.author_name || 'Anonymous'} />
                   <span className="flex items-center gap-1">
@@ -240,6 +437,8 @@ export const DiscussionModal = ({
                       reply={reply}
                       onLike={() => handleReplyLike(reply)}
                       isLiked={likedReplies.has(reply.id)}
+                      onEdit={handleEditReply}
+                      onDelete={handleDeleteReply}
                     />
                   ))}
                 </div>
@@ -248,13 +447,34 @@ export const DiscussionModal = ({
           </div>
         </ScrollArea>
 
-        {/* New reply form - always visible at bottom */}
+        {/* New reply form - collapsible */}
         <div className="border-t border-border p-6 shrink-0 bg-card">
-          <h4 className="font-medium text-foreground mb-3">Add a reply</h4>
-          <NewReplyForm
-            onSubmit={handleSubmitReply}
-            isSubmitting={isSubmittingReply}
-          />
+          <Collapsible open={isReplyFormOpen} onOpenChange={setIsReplyFormOpen}>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant={isReplyFormOpen ? "outline" : "default"}
+                className="w-full rounded-full"
+              >
+                {isReplyFormOpen ? (
+                  <>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancel
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add a reply
+                  </>
+                )}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4">
+              <NewReplyForm
+                onSubmit={handleSubmitReply}
+                isSubmitting={isSubmittingReply}
+              />
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </DialogContent>
     </Dialog>
