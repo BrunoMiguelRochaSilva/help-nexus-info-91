@@ -183,15 +183,15 @@ export const DiscussionModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-0">
+      <DialogContent className="sm:max-w-2xl bg-card border-border max-h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogHeader className="p-6 pb-4 shrink-0">
           <DialogTitle className="text-xl font-semibold text-foreground pr-8">
             {discussion.title}
           </DialogTitle>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 px-6">
-          <div className="space-y-4 pb-4">
+        <ScrollArea className="flex-1 min-h-0 px-6">
+          <div className="space-y-4">
             {/* Main discussion content */}
             <div className="space-y-3">
               <p className="text-foreground whitespace-pre-wrap">{discussion.body}</p>
@@ -245,17 +245,17 @@ export const DiscussionModal = ({
                 </div>
               )}
             </div>
-
-            {/* New reply form */}
-            <div className="border-t border-border pt-4">
-              <h4 className="font-medium text-foreground mb-3">Add a reply</h4>
-              <NewReplyForm
-                onSubmit={handleSubmitReply}
-                isSubmitting={isSubmittingReply}
-              />
-            </div>
           </div>
         </ScrollArea>
+
+        {/* New reply form - always visible at bottom */}
+        <div className="border-t border-border p-6 shrink-0 bg-card">
+          <h4 className="font-medium text-foreground mb-3">Add a reply</h4>
+          <NewReplyForm
+            onSubmit={handleSubmitReply}
+            isSubmitting={isSubmittingReply}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );
