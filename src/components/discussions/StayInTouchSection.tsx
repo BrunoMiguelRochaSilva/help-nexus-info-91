@@ -184,6 +184,24 @@ export const StayInTouchSection = () => {
     fetchDiscussions();
   };
 
+  const handleDeleteDiscussion = async (discussionId: string) => {
+    try {
+      const { error } = await supabase
+        .from('discussions')
+        .update({ is_hidden: true })
+        .eq('id', discussionId);
+
+      if (error) throw error;
+      
+      setDiscussions((prev) => prev.filter((d) => d.id !== discussionId));
+      toast.success('Discussion deleted');
+    } catch (error) {
+      console.error('Error deleting discussion:', error);
+      toast.error('Failed to delete discussion');
+      throw error;
+    }
+  };
+
   const displayedDiscussions = discussions.slice(0, displayCount);
   const hasMore = discussions.length > displayCount;
 
@@ -258,6 +276,7 @@ export const StayInTouchSection = () => {
         onLike={() => selectedDiscussion && handleLikeDiscussion(selectedDiscussion)}
         isLiked={selectedDiscussion ? likedDiscussions.has(selectedDiscussion.id) : false}
         onUpdate={handleUpdateFromModal}
+        onDelete={handleDeleteDiscussion}
       />
 
       <NewDiscussionModal
