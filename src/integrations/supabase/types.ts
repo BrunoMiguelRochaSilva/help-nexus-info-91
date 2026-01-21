@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_disease_searches: {
+        Row: {
+          anonymous_id: string | null
+          created_at: string | null
+          disease_name: string
+          id: string
+          normalized_name: string
+          orphacode: string | null
+        }
+        Insert: {
+          anonymous_id?: string | null
+          created_at?: string | null
+          disease_name: string
+          id?: string
+          normalized_name: string
+          orphacode?: string | null
+        }
+        Update: {
+          anonymous_id?: string | null
+          created_at?: string | null
+          disease_name?: string
+          id?: string
+          normalized_name?: string
+          orphacode?: string | null
+        }
+        Relationships: []
+      }
       discussion_likes: {
         Row: {
           created_at: string
