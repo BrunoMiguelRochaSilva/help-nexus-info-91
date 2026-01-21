@@ -133,6 +133,33 @@ export type Database = {
         }
         Relationships: []
       }
+      interactions: {
+        Row: {
+          anonymous_id: string | null
+          answer: string
+          created_at: string | null
+          id: number
+          question: string
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_id?: string | null
+          answer: string
+          created_at?: string | null
+          id?: number
+          question: string
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_id?: string | null
+          answer?: string
+          created_at?: string | null
+          id?: number
+          question?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       private_messages: {
         Row: {
           content: string
