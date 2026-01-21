@@ -136,6 +136,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          terms_accepted_at: string | null
+          terms_version: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          name: string
+          terms_accepted_at?: string | null
+          terms_version?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          terms_accepted_at?: string | null
+          terms_version?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       replies: {
         Row: {
           author_name: string
