@@ -19,7 +19,9 @@ export type Database = {
           anonymous_id: string | null
           created_at: string | null
           disease_name: string
+          english_name: string | null
           id: string
+          language: string | null
           normalized_name: string
           orphacode: string | null
         }
@@ -27,7 +29,9 @@ export type Database = {
           anonymous_id?: string | null
           created_at?: string | null
           disease_name: string
+          english_name?: string | null
           id?: string
+          language?: string | null
           normalized_name: string
           orphacode?: string | null
         }
@@ -35,7 +39,9 @@ export type Database = {
           anonymous_id?: string | null
           created_at?: string | null
           disease_name?: string
+          english_name?: string | null
           id?: string
+          language?: string | null
           normalized_name?: string
           orphacode?: string | null
         }
